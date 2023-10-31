@@ -2,6 +2,8 @@ import os.path
 from tkinter import *
 from tkinter import ttk, filedialog
 
+from src.fmt_loginfo import *
+
 
 class Main_Gui:
     def __init__(self, start_file=None, start_dir=None):
@@ -109,22 +111,19 @@ class Main_Gui:
     def click_recent(self):
         pass
 
+
     def parse_file(self, event):
         print('parse file ')
         fidx = self.logfiles_ls.curselection()
         if fidx:
             f = self.logfiles_ls.get(fidx)
             smp_list, ele_list, tids_set_cnts_dict = handle_one_logfile(f)
+            msg = get_general_info(smp_list,ele_list)
+            msg += get_set_balance_info(smp_list,ele_list,tids_set_cnts_dict)
 
-            msg = f"total_smp_cnt={len(smp_list)}\n"
-            msg += '\n'.join(
-                [f'tid={tid} set_cnt_info={set_cnt_info}' for tid, set_cnt_info in tids_set_cnts_dict.items()])
+            # show msg
             self.text.delete('1.0', 'end')
             self.text.insert('1.0', msg)
-            print(len(smp_list))
-            if smp_list:
-                print(str(smp_list[0].lines))
-                print(str(smp_list[-1].lines))
         pass
 
 
